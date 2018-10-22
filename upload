@@ -12,7 +12,7 @@ echo "******************************************"
 printf "\n\n\n\n"
 
 
-printf "更新請輸入: update\n新建的請輸入: create\n退出請輸入exit"
+printf "更新請輸入: update\n新建的請輸入: create\n退出請輸入:exit\n"
 read -p "請輸入：" action
 successful=0
 while [ $successful -eq 0 ]; do
