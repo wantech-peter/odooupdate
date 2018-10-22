@@ -27,7 +27,7 @@ while [ $successful -eq 0 ]; do
     fi
 done
 
-if [ successful -eq 1 ]; then
+if [ $successful -eq 1 ]; then
     if [ "$action" = "update" ]; then
         read -p "更新插件目錄位置(例：/opt/odoo/wantech_module/sales_report_custom/)" modulepathupdate
         git pull $modulepathupdate
