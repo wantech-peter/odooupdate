@@ -12,7 +12,7 @@ echo "******************************************"
 printf "\n\n\n\n"
 
 
-printf "更新請輸入: update\n新建的請輸入: create\n"
+printf "更新請輸入: update\n新建的請輸入: create\n退出請輸入exit"
 read -p "請輸入：" action
 successful=0
 while [ $successful -eq 0 ]; do
@@ -20,31 +20,38 @@ while [ $successful -eq 0 ]; do
         successful=1
     elif [ "$action" = "create" ]; then
         successful=1
+    elif [ "$action" = "exit" ]; then
+        break
     else
         read -p "請重新輸入正確指示：" action
     fi
 done
 
-if [ "$action" = "update" ]; then
-    read -p "更新插件目錄位置(例：/opt/odoo/wantech_module/sales_report_custom/)" modulepathupdate
-    git pull $modulepathupdate
-elif [ "$action" = "create" ]; then
-    read -p "下載全新插件位置(:/opt/odoo/wantech_module/)" modulepathcreate
-    read -p "visualstudio插件https地址(例：https://wantech.visualstudio.com/Dev%20Team/_git/wantech_module)" vsurl
-    git clone $vsurl $modulepathcreate
+if [ successful -eq 1 ]; then
+    if [ "$action" = "update" ]; then
+        read -p "更新插件目錄位置(例：/opt/odoo/wantech_module/sales_report_custom/)" modulepathupdate
+        git pull $modulepathupdate
+    elif [ "$action" = "create" ]; then
+        read -p "下載全新插件位置(:/opt/odoo/wantech_module/)" modulepathcreate
+        read -p "visualstudio插件https地址(例：https://wantech.visualstudio.com/Dev%20Team/_git/wantech_module)" vsurl
+        git clone $vsurl $modulepathcreate
+    fi
+
+    read -p "目標odoo位置(例：/opt/odoo/):" odoopath
+    sudo chmod -R 777 $odoopath
+    read -p "請輸入用戶及組別(例：odoo:super-dev)" usergroups
+    sudo chown -R $usergroups $odoopath
+
+    #targetid=$(stat -c "%u" $odoopath)
+    #targetid=$(id -nG $targetid)
+    #retargetid=${targetid/ /:}
+
+    echo "\n"
+    echo "\n"
+    echo "請重啟此odoo service"
+    echo "參考：systemctl restart odoo-xxxxx"
 fi
+echo "退出程序"
 
-read -p "目標odoo位置(例：/opt/odoo/):" odoopath
-sudo chmod -R 777 $odoopath
-read -p "請輸入用戶及組別(例：odoo:super-dev)" usergroups
-sudo chown -R $usergroups $odoopath
 
-#targetid=$(stat -c "%u" $odoopath)
-#targetid=$(id -nG $targetid)
-#retargetid=${targetid/ /:}
-
-echo "\n"
-echo "\n"
-echo "請重啟此odoo service"
-echo "參考：systemctl restart odoo-xxxxx"
 
